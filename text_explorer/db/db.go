@@ -16,7 +16,7 @@ const (
 
 var db_connection *sql.DB
 
-func DB_connect() error {
+func DB_connect() {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
@@ -27,12 +27,15 @@ func DB_connect() error {
 
 	err = db.Ping()
 	if err != nil {
-		return err
+		panic(err)
 	}
 
-	fmt.Println("Successfully connected!")
 	db_connection = db
-	return nil
+	fmt.Println("Successfully connected!")
+}
+
+func DB_close() error {
+	return db_connection.Close()
 }
 
 func Article_get() error {
